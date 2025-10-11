@@ -20,6 +20,7 @@ export function Plans() {
         { nombre: 'Analítica en los proyectos', disponible: true },
         { nombre: 'Reportes', disponible: true },
       ],
+      tipo: 'checkout', // 🔹 Tipo: redirige a pago
     },
     {
       nombre: 'Premium',
@@ -33,6 +34,21 @@ export function Plans() {
         { nombre: 'Analítica en los proyectos', disponible: true },
         { nombre: 'Reportes', disponible: true },
       ],
+      tipo: 'checkout',
+    },
+    {
+      nombre: 'Empresarial',
+      precio: 'Planes personalizados',
+      color: '#3AA657',
+      usuarios: '+500',
+      features: [
+        { nombre: 'Más de 500 usuarios', disponible: true },
+        { nombre: 'Soporte prioritario 24/7', disponible: true },
+        { nombre: 'Descuentos exclusivos según meses de permanencia', disponible: true },
+        { nombre: 'Analítica en los proyectos', disponible: true },
+        { nombre: 'Reportes avanzados', disponible: true },
+      ],
+      tipo: 'formulario', // 🔹 Tipo: redirige a formulario
     },
   ];
 
@@ -60,7 +76,7 @@ export function Plans() {
           Compara las características de cada plan y elige el que mejor se adapte a tu institución.
         </p>
 
-        <div className="grid md:grid-cols-2 gap-10">
+        <div className="grid md:grid-cols-3 gap-10">
           {planes.map((plan, index) => (
             <div
               key={index}
@@ -109,25 +125,36 @@ export function Plans() {
                   ))}
                 </ul>
 
+                {/* Botón dinámico */}
                 <Button
-                  onClick={() =>
-                    navigate('/checkout', {
-                      state: {
-                        plan: {
-                          nombre: plan.nombre,
-                          precio: plan.precio,
-                          usuarios: plan.usuarios,
+                  onClick={() => {
+                    if (plan.tipo === 'checkout') {
+                      navigate('/checkout', {
+                        state: {
+                          plan: {
+                            nombre: plan.nombre,
+                            precio: plan.precio,
+                            usuarios: plan.usuarios,
+                          },
                         },
-                      },
-                    })
-                  }
+                      });
+                    } else if (plan.tipo === 'formulario') {
+                      navigate('/enterprise-form', {
+                        state: { plan },
+                      });
+                    }
+                  }}
                   className={`w-full font-poppins py-4 text-lg rounded-xl shadow-md hover:shadow-lg transition-all text-white ${
                     plan.nombre === 'Básico'
                       ? 'bg-[#3A6EA5] hover:bg-[#2E5A8A]'
-                      : 'bg-[#FFD369] hover:bg-[#F5C94F] text-[#222831]'
+                      : plan.nombre === 'Premium'
+                      ? 'bg-[#FFD369] hover:bg-[#F5C94F] text-[#222831]'
+                      : 'bg-[#3AA657] hover:bg-[#2F8A48]'
                   }`}
                 >
-                  Elegir Plan
+                  {plan.tipo === 'formulario'
+                    ? 'Contactar a Planifika'
+                    : 'Elegir Plan'}
                 </Button>
               </div>
             </div>
