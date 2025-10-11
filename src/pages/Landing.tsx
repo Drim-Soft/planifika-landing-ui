@@ -160,25 +160,16 @@ export function Landing() {
               proyectos estudiantiles, iniciativas de investigación y experiencias de aprendizaje colaborativo con claridad y eficiencia sin precedentes.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
-              <Link to="/login">
+            <div className="flex justify-center mb-16">
+            <Link to="/plans">
                 <Button 
-                  size="lg" 
-                  className="px-10 py-5 text-xl font-['Poppins'] rounded-2xl shadow-2xl shadow-[#FFD369]/30 hover:shadow-[#FFD369]/50 transform hover:scale-105 transition-all duration-300"
-                >
-                  <span>Comenzar Prueba Gratuita</span>
-                  <ArrowRight className="h-6 w-6 ml-2" />
+                    size="lg" 
+                    className="flex items-center justify-center gap-2 px-12 py-6 text-xl font-['Poppins'] rounded-2xl shadow-2xl shadow-[#FFD369]/30 hover:shadow-[#FFD369]/50 transform hover:scale-105 transition-all duration-300">
+                    <Zap className="h-5 w-5" />
+                    <span>Ver planes</span>
                 </Button>
-              </Link>
-              <Link to="/join">
-                <Button 
-                  variant="outline" 
-                  size="lg" 
-                  className="px-10 py-5 text-xl font-['Poppins'] rounded-2xl border-2 border-gray-300 hover:border-[#3A6EA5] hover:text-[#3A6EA5] transform hover:scale-105 transition-all duration-300"
-                >
-                  Solicitar Demo Institucional
-                </Button>
-              </Link>
+            </Link>
+
             </div>
 
             {/* Indicadores de Confianza Mejorados */}
@@ -316,27 +307,18 @@ export function Landing() {
             Comienza tu prueba gratuita hoy y experimenta el futuro de la gestión de proyectos educativos.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Link to="/login">
-              <Button 
-                size="lg" 
-                className="px-12 py-6 text-xl font-['Poppins'] rounded-2xl shadow-2xl shadow-[#FFD369]/30 hover:shadow-[#FFD369]/50 transform hover:scale-105 transition-all duration-300"
-              >
-                <Zap className="h-6 w-6 mr-3" />
-                Comenzar Prueba Gratuita
-              </Button>
+          <div className="flex justify-center">
+            <Link to="/plans">
+                <Button 
+                    size="lg" 
+                    className="flex items-center justify-center gap-2 px-10 py-5 text-xl font-['Poppins'] rounded-2xl shadow-2xl shadow-[#FFD369]/30 hover:shadow-[#FFD369]/50 transform hover:scale-105 transition-all duration-300"
+                >
+                    <span>Ver planes</span>
+                    <ArrowRight className="h-5 w-5" />
+                </Button>
             </Link>
-            <Link to="/join">
-              <Button 
-                variant="outline" 
-                size="lg" 
-                className="px-12 py-6 text-xl font-['Poppins'] rounded-2xl border-2 border-gray-300 text-white hover:bg-white hover:text-[#222831] transform hover:scale-105 transition-all duration-300"
-              >
-                <Calendar className="h-6 w-6 mr-3" />
-                Agendar Demo
-              </Button>
-            </Link>
-          </div>
+
+            </div>
         </div>
       </div>
 

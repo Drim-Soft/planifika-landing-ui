@@ -8,7 +8,7 @@ export function Processing() {
   const state = location.state;
 
   useEffect(() => {
-    // Simula proceso de pago (3 segundos)
+    // Simulate payment process (3 seconds)
     const timer = setTimeout(() => {
       navigate('/confirm', { state });
     }, 3000);

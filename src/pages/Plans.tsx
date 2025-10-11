@@ -7,32 +7,48 @@ import { CheckCircle, XCircle } from 'lucide-react';
 export function Plans() {
   const navigate = useNavigate();
 
-  const planes = [
+  const plans = [
     {
-      nombre: 'Básico',
-      precio: '50 USD / mes',
+      name: 'Básico',
+      price: '50 USD / mes',
       color: '#3A6EA5',
-      usuarios: 100,
+      users: 100,
       features: [
-        { nombre: 'Hasta 100 usuarios', disponible: true },
-        { nombre: 'Soporte prioritario 24/7', disponible: false },
-        { nombre: 'Descuentos exclusivos según meses de permanencia', disponible: false },
-        { nombre: 'Analítica en los proyectos', disponible: true },
-        { nombre: 'Reportes', disponible: true },
+        { name: 'Hasta 100 usuarios', available: true },
+        { name: 'Soporte prioritario 24/7', available: false },
+        { name: 'Descuentos exclusivos según meses de permanencia', available: false },
+        { name: 'Analítica en los proyectos', available: true },
+        { name: 'Reportes', available: true },
       ],
+      type: 'checkout', // 🔹 Tipo: redirige a pago
     },
     {
-      nombre: 'Premium',
-      precio: '100 USD / mes',
+      name: 'Premium',
+      price: '100 USD / mes',
       color: '#FFD369',
-      usuarios: 500,
+      users: 500,
       features: [
-        { nombre: 'Hasta 500 usuarios', disponible: true },
-        { nombre: 'Soporte prioritario 24/7', disponible: true },
-        { nombre: 'Descuentos exclusivos según meses de permanencia', disponible: true },
-        { nombre: 'Analítica en los proyectos', disponible: true },
-        { nombre: 'Reportes', disponible: true },
+        { name: 'Hasta 500 usuarios', available: true },
+        { name: 'Soporte prioritario 24/7', available: true },
+        { name: 'Descuentos exclusivos según meses de permanencia', available: true },
+        { name: 'Analítica en los proyectos', available: true },
+        { name: 'Reportes', available: true },
       ],
+      type: 'checkout',
+    },
+    {
+      name: 'Empresarial',
+      price: 'Planes personalizados',
+      color: '#3AA657',
+      users: '+500',
+      features: [
+        { name: 'Más de 500 usuarios', available: true },
+        { name: 'Soporte prioritario 24/7', available: true },
+        { name: 'Descuentos exclusivos según meses de permanencia', available: true },
+        { name: 'Analítica en los proyectos', available: true },
+        { name: 'Reportes avanzados', available: true },
+      ],
+      type: 'form', // 🔹 Tipo: redirige a formulario
     },
   ];
 
@@ -51,7 +67,7 @@ export function Plans() {
         </div>
       </nav>
 
-      {/* Sección de precios */}
+      {/* Pricing Section */}
       <section className="max-w-6xl mx-auto px-6 py-24 text-center">
         <h1 className="text-5xl font-bold font-poppins text-[#222831] mb-10">
           Planes y Precios
@@ -60,8 +76,8 @@ export function Plans() {
           Compara las características de cada plan y elige el que mejor se adapte a tu institución.
         </p>
 
-        <div className="grid md:grid-cols-2 gap-10">
-          {planes.map((plan, index) => (
+        <div className="grid md:grid-cols-3 gap-10">
+          {plans.map((plan, index) => (
             <div
               key={index}
               className="relative overflow-hidden p-10 bg-white rounded-3xl border border-gray-200 shadow-md hover:shadow-xl transition-all duration-300 planifika-card-hover"
@@ -77,23 +93,23 @@ export function Plans() {
                   className="text-4xl font-bold font-poppins mb-4"
                   style={{ color: plan.color }}
                 >
-                  {plan.nombre}
+                  {plan.name}
                 </h2>
                 <p className="text-3xl font-bold text-[#222831] mb-3">
-                  {plan.precio}
+                  {plan.price}
                 </p>
 
                 <ul className="text-left mb-8 space-y-4">
-                  {plan.features.map((f, i) => (
+                  {plan.features.map((feature, i) => (
                     <li
                       key={i}
                       className={`flex items-center font-inter ${
-                        f.disponible
+                        feature.available
                           ? 'text-gray-800'
                           : 'text-gray-400 line-through opacity-70'
                       }`}
                     >
-                      {f.disponible ? (
+                      {feature.available ? (
                         <CheckCircle
                           className="h-5 w-5 mr-3 text-[#3A6EA5]"
                           strokeWidth={2.5}
@@ -104,30 +120,41 @@ export function Plans() {
                           strokeWidth={2}
                         />
                       )}
-                      {f.nombre}
+                      {feature.name}
                     </li>
                   ))}
                 </ul>
 
+                {/* Dynamic Button */}
                 <Button
-                  onClick={() =>
-                    navigate('/checkout', {
-                      state: {
-                        plan: {
-                          nombre: plan.nombre,
-                          precio: plan.precio,
-                          usuarios: plan.usuarios,
+                  onClick={() => {
+                    if (plan.type === 'checkout') {
+                      navigate('/checkout', {
+                        state: {
+                          plan: {
+                            name: plan.name,
+                            price: plan.price,
+                            users: plan.users,
+                          },
                         },
-                      },
-                    })
-                  }
+                      });
+                    } else if (plan.type === 'form') {
+                      navigate('/enterprise-form', {
+                        state: { plan },
+                      });
+                    }
+                  }}
                   className={`w-full font-poppins py-4 text-lg rounded-xl shadow-md hover:shadow-lg transition-all text-white ${
-                    plan.nombre === 'Básico'
+                    plan.name === 'Básico'
                       ? 'bg-[#3A6EA5] hover:bg-[#2E5A8A]'
-                      : 'bg-[#FFD369] hover:bg-[#F5C94F] text-[#222831]'
+                      : plan.name === 'Premium'
+                      ? 'bg-[#FFD369] hover:bg-[#F5C94F] text-[#222831]'
+                      : 'bg-[#3AA657] hover:bg-[#2F8A48]'
                   }`}
                 >
-                  Elegir Plan
+                  {plan.type === 'form'
+                    ? 'Contactar a Planifika'
+                    : 'Elegir Plan'}
                 </Button>
               </div>
             </div>
