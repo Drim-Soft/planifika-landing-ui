@@ -6,9 +6,9 @@ import { Logo } from '../components/ui/Logo';
 export function Confirm() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { plan, metodo, datos } = location.state || {};
+  const { plan, method, data } = location.state || {};
 
-  if (!plan || !datos) {
+  if (!plan || !data) {
     navigate('/plans');
     return null;
   }
@@ -22,7 +22,7 @@ export function Confirm() {
           <Logo className="h-12 w-12" />
         </div>
 
-        {/* Título */}
+        {/* Title */}
         <h1 className="text-3xl font-bold text-[#222831] font-poppins mb-6">
           Pago confirmado ✅
         </h1>
@@ -38,19 +38,19 @@ export function Confirm() {
           </p>
         </div>
 
-        {/* Datos fijos del plan */}
+        {/* Fixed plan data */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-[#3A6EA5] mb-2">{plan.nombre} Plan</h2>
+          <h2 className="text-2xl font-bold text-[#3A6EA5] mb-2">{plan.name} Plan</h2>
           <p className="text-gray-600 font-inter">
-            Método de pago: <strong>{metodo || 'No especificado'}</strong>
+            Método de pago: <strong>{method || 'No especificado'}</strong>
           </p>
-          <p className="text-lg font-semibold mt-2">Total: {plan.precio}</p>
+          <p className="text-lg font-semibold mt-2">Total: {plan.price}</p>
         </div>
 
         <Button
           onClick={() => navigate('/')}
           className={`w-full py-4 text-lg font-poppins ${
-            plan.nombre === 'Premium'
+            plan.name === 'Premium'
               ? 'bg-[#FFD369] hover:bg-[#F5C94F] text-[#222831]'
               : 'bg-[#3A6EA5] hover:bg-[#2E5A8A] text-white'
           }`}

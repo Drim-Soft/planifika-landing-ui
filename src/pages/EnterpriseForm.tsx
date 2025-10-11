@@ -10,16 +10,16 @@ export function EnterpriseForm() {
   const navigate = useNavigate();
   const plan = location.state?.plan;
 
-  const [empresa, setEmpresa] = useState('');
-  const [nombre, setNombre] = useState('');
-  const [correo, setCorreo] = useState('');
-  const [accesos, setAccesos] = useState('');
-  const [telefono, setTelefono] = useState('');
-  const [enviado, setEnviado] = useState(false);
+  const [company, setCompany] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [accessCount, setAccessCount] = useState('');
+  const [phone, setPhone] = useState('');
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setEnviado(true);
+    setSubmitted(true);
     setTimeout(() => navigate('/'), 10000); // Simula envío y redirige al inicio
   };
 
@@ -46,15 +46,17 @@ export function EnterpriseForm() {
             Solicitud de contacto para plan empresarial
           </h2>
 
-          {!enviado ? (
+          {!submitted ? (
             <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-6 text-left">
               {/* Nombre empresa */}
               <div className="md:col-span-2">
                 <label className="block text-gray-700 font-semibold mb-2">Nombre de la empresa</label>
                 <input
                   type="text"
-                  value={empresa}
-                  onChange={(e) => setEmpresa(e.target.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúñÑ0-9 ]/g, ''))}
+                  value={company}
+                  onChange={(e) =>
+                    setCompany(e.target.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúñÑ0-9 ]/g, ''))
+                  }
                   placeholder="Ej. Universidad de la Sabana"
                   required
                   className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#3A6EA5] outline-none"
@@ -66,8 +68,10 @@ export function EnterpriseForm() {
                 <label className="block text-gray-700 font-semibold mb-2">Nombre de la persona</label>
                 <input
                   type="text"
-                  value={nombre}
-                  onChange={(e) => setNombre(e.target.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúñÑ ]/g, ''))}
+                  value={fullName}
+                  onChange={(e) =>
+                    setFullName(e.target.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúñÑ ]/g, ''))
+                  }
                   placeholder="Ej. Juan Pérez"
                   required
                   className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#3A6EA5] outline-none"
@@ -79,8 +83,8 @@ export function EnterpriseForm() {
                 <label className="block text-gray-700 font-semibold mb-2">Correo empresarial</label>
                 <input
                   type="email"
-                  value={correo}
-                  onChange={(e) => setCorreo(e.target.value)}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="nombre@empresa.com"
                   required
                   className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#3A6EA5] outline-none"
@@ -92,8 +96,8 @@ export function EnterpriseForm() {
                 <label className="block text-gray-700 font-semibold mb-2">Teléfono de contacto</label>
                 <PhoneInput
                   country="co"
-                  value={telefono}
-                  onChange={(phone: string) => setTelefono(phone)}
+                  value={phone}
+                  onChange={(value: string) => setPhone(value)}
                   enableSearch
                   disableSearchIcon
                   preferredCountries={['co', 'mx', 'us', 'es', 'ar', 'br']}
@@ -101,37 +105,37 @@ export function EnterpriseForm() {
                   inputClass="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#3A6EA5] outline-none text-gray-800"
                   buttonClass="border-gray-300 bg-white rounded-l-md"
                   dropdownClass="text-gray-700 bg-white shadow-lg border border-gray-300"
-                  inputProps={{ name: 'telefono', required: true }}
+                  inputProps={{ name: 'phone', required: true }}
                 />
               </div>
-                {/* Total de accesos */}
-                <div className="md:col-span-2">
+
+              {/* Total de accesos */}
+              <div className="md:col-span-2">
                 <label className="block text-gray-700 font-semibold mb-2">
-                    Total de accesos a comprar
+                  Total de accesos a comprar
                 </label>
                 <input
-                    type="number"
-                    value={accesos}
-                    onChange={(e) => {
-                    // Permitir solo números, sin filtrar todavía
+                  type="number"
+                  value={accessCount}
+                  onChange={(e) => {
                     const value = e.target.value.replace(/\D/g, '');
-                    setAccesos(value);
-                    }}
-                    onBlur={() => {
-                    // Validar cuando el usuario salga del input
-                    if (accesos && parseInt(accesos) < 501) {
-                        setAccesos('501');
+                    setAccessCount(value);
+                  }}
+                  onBlur={() => {
+                    if (accessCount && parseInt(accessCount) < 501) {
+                      setAccessCount('501');
                     }
-                    }}
-                    placeholder="Ej. 1200"
-                    min={501}
-                    required
-                    className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#3A6EA5] outline-none"
+                  }}
+                  placeholder="Ej. 1200"
+                  min={501}
+                  required
+                  className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#3A6EA5] outline-none"
                 />
                 <p className="text-sm text-gray-500 mt-1">
-                    *El mínimo permitido es de 501 accesos.
+                  *El mínimo permitido es de 501 accesos.
                 </p>
-                </div>
+              </div>
+
               {/* Botón */}
               <div className="md:col-span-2 text-center mt-6">
                 <Button
