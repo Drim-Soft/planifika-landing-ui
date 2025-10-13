@@ -10,7 +10,7 @@ export function Plans() {
   const plans = [
     {
       name: 'Básico',
-      price: '50 USD / mes',
+      price: '$210.000 COP / mes',
       color: '#3A6EA5',
       users: 100,
       features: [
@@ -20,11 +20,11 @@ export function Plans() {
         { name: 'Analítica en los proyectos', available: true },
         { name: 'Reportes', available: true },
       ],
-      type: 'checkout', // 🔹 Tipo: redirige a pago
+      type: 'checkout',
     },
     {
       name: 'Premium',
-      price: '100 USD / mes',
+      price: '$420.000 COP / mes',
       color: '#FFD369',
       users: 500,
       features: [
@@ -48,7 +48,7 @@ export function Plans() {
         { name: 'Analítica en los proyectos', available: true },
         { name: 'Reportes avanzados', available: true },
       ],
-      type: 'form', // 🔹 Tipo: redirige a formulario
+      type: 'form',
     },
   ];
 
@@ -132,9 +132,9 @@ export function Plans() {
                       navigate('/checkout', {
                         state: {
                           plan: {
-                            name: plan.name,
-                            price: plan.price,
-                            users: plan.users,
+                            nombre: plan.name,
+                            precio: plan.price,
+                            usuarios: plan.users,
                           },
                         },
                       });

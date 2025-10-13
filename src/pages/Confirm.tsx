@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Logo } from '../components/ui/Logo';
@@ -8,10 +8,13 @@ export function Confirm() {
   const navigate = useNavigate();
   const { plan, method, data } = location.state || {};
 
-  if (!plan || !data) {
-    navigate('/plans');
-    return null;
-  }
+  useEffect(() => {
+    if (!plan || !data) {
+      navigate('/plans');
+    }
+  }, [plan, data, navigate]);
+
+  if (!plan || !data) return null;
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#F7F7F7] via-white to-[#F7F7F7] p-6">
@@ -38,9 +41,11 @@ export function Confirm() {
           </p>
         </div>
 
-        {/* Fixed plan data */}
+        {/* Plan data */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-[#3A6EA5] mb-2">{plan.name} Plan</h2>
+          <h2 className="text-2xl font-bold text-[#3A6EA5] mb-2">
+            {plan.name} Plan
+          </h2>
           <p className="text-gray-600 font-inter">
             Método de pago: <strong>{method || 'No especificado'}</strong>
           </p>
