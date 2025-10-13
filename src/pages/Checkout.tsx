@@ -307,20 +307,24 @@ export function Checkout() {
           {/* Total */}
           <div className="mt-12 text-center">
             <h3 className="text-3xl font-bold text-[#222831] mb-3">Total: {plan.precio}</h3>
-            <Button
-              onClick={() =>
-                navigate('/processing', {
-                  state: { plan, metodo, datos: { institucion, nit, correo, telefono, direccion } },
-                })
-              }
-              className={`px-12 py-4 text-lg font-poppins ${
-                isPremium
-                  ? 'bg-[#FFD369] hover:bg-[#F5C94F] text-[#222831]'
-                  : 'bg-[#3A6EA5] hover:bg-[#2E5A8A] text-white'
-              }`}
-            >
-              Confirmar suscripción
-            </Button>
+          <Button
+            onClick={() =>
+              navigate('/processing', {
+                state: {
+                  plan,
+                  metodo,
+                  datos: { institucion, nit, correo, telefono, direccion },
+                },
+              })
+            }
+            className={`px-12 py-4 text-lg font-poppins ${
+              isPremium
+                ? 'bg-[#FFD369] hover:bg-[#F5C94F] text-[#222831]'
+                : 'bg-[#3A6EA5] hover:bg-[#2E5A8A] text-white'
+            }`}
+          >
+            Confirmar suscripción
+          </Button>
           </div>
         </div>
       </div>
