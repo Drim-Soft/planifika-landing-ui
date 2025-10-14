@@ -16,11 +16,41 @@ export function EnterpriseForm() {
   const [accessCount, setAccessCount] = useState('');
   const [phone, setPhone] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => navigate('/'), 10000); // Simula envío y redirige al inicio
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch('http://localhost:3001/api/send-enterprise-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          company,
+          fullName,
+          email,
+          phone,
+          accessCount,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al enviar la solicitud');
+      }
+
+      setSubmitted(true);
+      setTimeout(() => navigate('/'), 10000);
+    } catch (err) {
+      setError('Error al enviar la solicitud. Por favor, inténtalo de nuevo.');
+      console.error('Error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -136,13 +166,23 @@ export function EnterpriseForm() {
                 </p>
               </div>
 
+              {/* Error message */}
+              {error && (
+                <div className="md:col-span-2">
+                  <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                    {error}
+                  </div>
+                </div>
+              )}
+
               {/* Botón */}
               <div className="md:col-span-2 text-center mt-6">
                 <Button
                   type="submit"
-                  className="px-12 py-4 bg-[#3AA657] hover:bg-[#2F8A48] text-white font-poppins text-lg rounded-xl shadow-md hover:shadow-lg"
+                  disabled={loading}
+                  className="px-12 py-4 bg-[#3AA657] hover:bg-[#2F8A48] disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-poppins text-lg rounded-xl shadow-md hover:shadow-lg"
                 >
-                  Enviar solicitud
+                  {loading ? 'Enviando...' : 'Enviar solicitud'}
                 </Button>
               </div>
             </form>
