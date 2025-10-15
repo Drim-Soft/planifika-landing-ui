@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Logo } from '../components/ui/Logo';
+import { getSignupUrl } from '../config/env';
 
 export function Confirm() {
   const location = useLocation();
@@ -53,14 +54,14 @@ export function Confirm() {
         </div>
 
         <Button
-          onClick={() => navigate('/')}
+          onClick={() => window.location.href = getSignupUrl(1)}
           className={`w-full py-4 text-lg font-poppins ${
             plan.name === 'Premium'
               ? 'bg-[#FFD369] hover:bg-[#F5C94F] text-[#222831]'
               : 'bg-[#3A6EA5] hover:bg-[#2E5A8A] text-white'
           }`}
         >
-          Volver al inicio
+          Continuar al registro de administrador
         </Button>
       </div>
     </div>

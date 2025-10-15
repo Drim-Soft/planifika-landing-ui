@@ -21,6 +21,7 @@ import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { Logo } from '../components/ui/Logo';
 import { DrimSoftLogo } from '../components/ui/DrimSoftLogo';
+import { getSignupUrl, getStudentLoginUrl } from '../config/env';
 
 
 export function Landing() {
@@ -121,12 +122,19 @@ export function Landing() {
                 <a href="#testimonios" className="text-gray-600 hover:text-[#3A6EA5] transition-colors font-['Inter'] font-medium">Testimonios</a>
                 <Link to="/plans" className="text-gray-600 hover:text-[#3A6EA5] transition-colors font-['Inter'] font-medium">Planes y Precios</Link>
               </nav>
-              <Link to="/login">
-                <Button className="flex items-center space-x-2 font-['Poppins'] planifika-button-glow">
-                  <span>Iniciar Sesión</span>
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
+              <div className="flex items-center space-x-3">
+                <Link to={getSignupUrl(2)}>
+                  <Button className="flex items-center space-x-2 font-['Poppins'] bg-white text-[#3A6EA5] border border-[#3A6EA5] hover:bg-[#3A6EA5] hover:text-white transition-all duration-300">
+                    <span>Crear cuenta</span>
+                  </Button>
+                </Link>
+                <Link to={getStudentLoginUrl()}>
+                  <Button className="flex items-center space-x-2 font-['Poppins'] planifika-button-glow">
+                    <span>Iniciar Sesión</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
