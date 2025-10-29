@@ -4,6 +4,7 @@ import { Button } from '../components/ui/Button';
 import { Logo } from '../components/ui/Logo';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
+import emailjs from "@emailjs/browser";
 
 export function EnterpriseForm() {
   const location = useLocation();
@@ -19,30 +20,34 @@ export function EnterpriseForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const sendEmail = async (company: string, fullName: string, email: string, phone: string, accessCount: string) => {
+    emailjs
+      .send(
+        import.meta.env.VITE_EMAIL_SERVICE_ID,
+        import.meta.env.VITE_EMAIL_TEMPLATE_ID,
+        { company, fullName, email, phone, accessCount },
+        { publicKey: import.meta.env.VITE_EMAIL_PUBLIC_KEY }
+      )
+      .then(
+        (result) => {
+          setSubmitted(true);
+          setLoading(false);
+        }
+      ).catch(
+        (error) => {
+          console.error("Error ❌", error);
+          alert("Error al enviar el mensaje");
+        }
+      )
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
     try {
-      const response = await fetch('http://localhost:3001/api/send-enterprise-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          company,
-          fullName,
-          email,
-          phone,
-          accessCount,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Error al enviar la solicitud');
-      }
-
+      await sendEmail(company, fullName, email, phone, accessCount);
       setSubmitted(true);
       setTimeout(() => navigate('/'), 10000);
     } catch (err) {
