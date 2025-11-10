@@ -9,6 +9,8 @@ import { Plans } from './pages/Plans';
 import { Checkout } from './pages/Checkout';
 import { Processing } from './pages/Processing';
 import { Confirm } from './pages/Confirm';
+import './pages/EnterpriseForm';
+import { EnterpriseForm } from './pages/EnterpriseForm';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -19,6 +21,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/processing" element={<Processing />} />
         <Route path="/confirm" element={<Confirm />} />
+        <Route path="/enterprise-form" element={<EnterpriseForm/>} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

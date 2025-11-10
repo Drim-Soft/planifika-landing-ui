@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  Target, 
-  BookOpen, 
-  Users, 
-  BarChart3, 
-  Building, 
-  ArrowRight, 
-  CheckCircle, 
-  Star, 
+import {
+  Target,
+  BookOpen,
+  Users,
+  BarChart3,
+  Building,
+  ArrowRight,
+  CheckCircle,
+  Star,
   Globe,
   Award,
   Shield,
@@ -21,6 +21,7 @@ import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { Logo } from '../components/ui/Logo';
 import { DrimSoftLogo } from '../components/ui/DrimSoftLogo';
+import { getSignupUrl, getStudentLoginUrl } from '../config/env';
 
 
 export function Landing() {
@@ -56,7 +57,7 @@ export function Landing() {
       color: '#9C27B0'
     },
     {
-  icon: Logo,
+      icon: Logo,
       title: 'Logro de Objetivos',
       description: 'Establece hitos, rastrea entregables y alcanza la excelencia académica con gestión de proyectos de precisión.',
       color: '#FFD369'
@@ -75,7 +76,7 @@ export function Landing() {
     {
       quote: "Como administrador institucional, las características de análisis y gestión de usuarios nos ahorran incontables horas. La plataforma escala hermosamente en toda nuestra universidad.",
       author: "Michael Chen",
-      role: "Administrador Académico", 
+      role: "Administrador Académico",
       institution: "MIT",
       avatar: "https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?w=100&h=100&fit=crop&crop=face",
       rating: 5
@@ -121,12 +122,19 @@ export function Landing() {
                 <a href="#testimonios" className="text-gray-600 hover:text-[#3A6EA5] transition-colors font-['Inter'] font-medium">Testimonios</a>
                 <Link to="/plans" className="text-gray-600 hover:text-[#3A6EA5] transition-colors font-['Inter'] font-medium">Planes y Precios</Link>
               </nav>
-              <Link to="/login">
-                <Button className="flex items-center space-x-2 font-['Poppins'] planifika-button-glow">
-                  <span>Iniciar Sesión</span>
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
+              <div className="flex items-center space-x-3">
+                <Link to={getSignupUrl(2)}>
+                  <Button className="flex items-center space-x-2 font-['Poppins'] bg-white text-[#3A6EA5] border border-[#3A6EA5] hover:bg-[#3A6EA5] hover:text-white transition-all duration-300">
+                    <span>Crear cuenta</span>
+                  </Button>
+                </Link>
+                <Link to={getStudentLoginUrl()}>
+                  <Button className="flex items-center space-x-2 font-['Poppins'] planifika-button-glow">
+                    <span>Iniciar Sesión</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -146,7 +154,7 @@ export function Landing() {
                 ))}
               </div>
             </div>
-            
+
             <h1 className="text-6xl lg:text-8xl font-bold text-[#222831] mb-8 font-['Poppins'] leading-tight">
               Gestión de Proyectos
               <span className="block text-gradient bg-gradient-to-r from-[#3A6EA5] to-[#FFD369] bg-clip-text text-transparent">
@@ -154,31 +162,22 @@ export function Landing() {
               </span>
               <span className="block text-4xl lg:text-5xl text-gray-600 mt-2">Reimaginada</span>
             </h1>
-            
+
             <p className="text-xl lg:text-2xl text-gray-600 mb-12 max-w-4xl mx-auto font-['Inter'] leading-relaxed">
-              Potencia tu institución académica con una plataforma integral diseñada para gestionar 
+              Potencia tu institución académica con una plataforma integral diseñada para gestionar
               proyectos estudiantiles, iniciativas de investigación y experiencias de aprendizaje colaborativo con claridad y eficiencia sin precedentes.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
-              <Link to="/login">
-                <Button 
-                  size="lg" 
-                  className="px-10 py-5 text-xl font-['Poppins'] rounded-2xl shadow-2xl shadow-[#FFD369]/30 hover:shadow-[#FFD369]/50 transform hover:scale-105 transition-all duration-300"
-                >
-                  <span>Comenzar Prueba Gratuita</span>
-                  <ArrowRight className="h-6 w-6 ml-2" />
+            <div className="flex justify-center mb-16">
+              <Link to="/plans">
+                <Button
+                  size="lg"
+                  className="flex items-center justify-center gap-2 px-12 py-6 text-xl font-['Poppins'] rounded-2xl shadow-2xl shadow-[#FFD369]/30 hover:shadow-[#FFD369]/50 transform hover:scale-105 transition-all duration-300">
+                  <Zap className="h-5 w-5" />
+                  <span>Ver planes</span>
                 </Button>
               </Link>
-              <Link to="/join">
-                <Button 
-                  variant="outline" 
-                  size="lg" 
-                  className="px-10 py-5 text-xl font-['Poppins'] rounded-2xl border-2 border-gray-300 hover:border-[#3A6EA5] hover:text-[#3A6EA5] transform hover:scale-105 transition-all duration-300"
-                >
-                  Solicitar Demo Institucional
-                </Button>
-              </Link>
+
             </div>
 
             {/* Indicadores de Confianza Mejorados */}
@@ -210,22 +209,22 @@ export function Landing() {
               <span className="block text-gradient">Éxito Académico</span>
             </h2>
             <p className="text-xl text-gray-600 font-['Inter'] max-w-3xl mx-auto leading-relaxed">
-              Herramientas integrales diseñadas específicamente para instituciones educativas, 
+              Herramientas integrales diseñadas específicamente para instituciones educativas,
               excelencia en investigación y colaboración académica a escala.
             </p>
           </div>
 
           <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-12">
             {features.map((feature, index) => (
-              <Card 
-                key={index} 
+              <Card
+                key={index}
                 className="group text-center p-8 planifika-card-hover academic-glow"
               >
                 <div className="inline-flex items-center justify-center w-20 h-20 mb-6 bg-gradient-to-br rounded-2xl group-hover:scale-110 transition-all duration-300"
-                     style={{ 
-                       background: `linear-gradient(135deg, ${feature.color}20, ${feature.color}10)`,
-                       border: `1px solid ${feature.color}30`
-                     }}>
+                  style={{
+                    background: `linear-gradient(135deg, ${feature.color}20, ${feature.color}10)`,
+                    border: `1px solid ${feature.color}30`
+                  }}>
                   <feature.icon className="h-10 w-10" style={{ color: feature.color }} />
                 </div>
                 <h3 className="text-2xl font-semibold text-[#222831] mb-4 font-['Poppins'] group-hover:text-[#3A6EA5] transition-colors">
@@ -252,11 +251,11 @@ export function Landing() {
               Descubre cómo las instituciones están transformando su gestión de proyectos académicos
             </p>
           </div>
-          
+
           <div className="grid lg:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <Card 
-                key={index} 
+              <Card
+                key={index}
                 className="p-8 planifika-card-hover academic-glow"
                 style={{ animationDelay: `${index * 0.2}s` }}
               >
@@ -269,8 +268,8 @@ export function Landing() {
                   "{testimonial.quote}"
                 </blockquote>
                 <div className="flex items-center space-x-4">
-                  <img 
-                    src={testimonial.avatar} 
+                  <img
+                    src={testimonial.avatar}
                     alt={testimonial.author}
                     className="h-16 w-16 rounded-2xl object-cover ring-2 ring-gray-200"
                   />
@@ -305,37 +304,28 @@ export function Landing() {
           <div className="inline-flex items-center justify-center w-24 h-24 bg-[#FFD369]/20 rounded-full mb-8">
             <Logo className="h-12 w-12" />
           </div>
-          
+
           <h2 className="text-5xl lg:text-6xl font-bold text-white mb-8 font-['Poppins'] leading-tight">
             ¿Listo para Transformar tu
             <span className="block text-[#FFD369]">Experiencia Educativa?</span>
           </h2>
-          
+
           <p className="text-xl text-gray-200 mb-12 font-['Inter'] leading-relaxed max-w-3xl mx-auto">
-            Únete a miles de educadores y estudiantes que ya usan Planifika para lograr la excelencia académica. 
+            Únete a miles de educadores y estudiantes que ya usan Planifika para lograr la excelencia académica.
             Comienza tu prueba gratuita hoy y experimenta el futuro de la gestión de proyectos educativos.
           </p>
-          
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Link to="/login">
-              <Button 
-                size="lg" 
-                className="px-12 py-6 text-xl font-['Poppins'] rounded-2xl shadow-2xl shadow-[#FFD369]/30 hover:shadow-[#FFD369]/50 transform hover:scale-105 transition-all duration-300"
+
+          <div className="flex justify-center">
+            <Link to="/plans">
+              <Button
+                size="lg"
+                className="flex items-center justify-center gap-2 px-10 py-5 text-xl font-['Poppins'] rounded-2xl shadow-2xl shadow-[#FFD369]/30 hover:shadow-[#FFD369]/50 transform hover:scale-105 transition-all duration-300"
               >
-                <Zap className="h-6 w-6 mr-3" />
-                Comenzar Prueba Gratuita
+                <span>Ver planes</span>
+                <ArrowRight className="h-5 w-5" />
               </Button>
             </Link>
-            <Link to="/join">
-              <Button 
-                variant="outline" 
-                size="lg" 
-                className="px-12 py-6 text-xl font-['Poppins'] rounded-2xl border-2 border-gray-300 text-white hover:bg-white hover:text-[#222831] transform hover:scale-105 transition-all duration-300"
-              >
-                <Calendar className="h-6 w-6 mr-3" />
-                Agendar Demo
-              </Button>
-            </Link>
+
           </div>
         </div>
       </div>
@@ -360,7 +350,7 @@ export function Landing() {
                 </div>
               </div>
               <p className="text-gray-400 font-['Inter'] leading-relaxed text-lg max-w-md mb-6">
-                Empoderando instituciones educativas con soluciones integrales de gestión de proyectos 
+                Empoderando instituciones educativas con soluciones integrales de gestión de proyectos
                 diseñadas para la excelencia académica, colaboración en investigación y éxito estudiantil.
               </p>
               <div className="flex items-center space-x-4">
@@ -370,11 +360,11 @@ export function Landing() {
                 </div>
                 <div className="flex items-center space-x-2">
                   <Award className="h-5 w-5 text-[#FFD369]" />
-                  <span className="text-sm text-gray-400 font-['Inter']">Galardonado</span>
+                  <span className="text-sm text-gray-400 font-['Inter']">Premiado</span>
                 </div>
               </div>
             </div>
-            
+
             {/* Secciones de Enlaces Mejoradas */}
             <div>
               <h4 className="font-bold mb-6 font-['Poppins'] text-lg">Plataforma</h4>
@@ -386,7 +376,7 @@ export function Landing() {
                 <li><a href="#" className="hover:text-[#FFD369] transition-colors hover:underline">Documentación API</a></li>
               </ul>
             </div>
-            
+
             <div>
               <h4 className="font-bold mb-6 font-['Poppins'] text-lg">Educación</h4>
               <ul className="space-y-3 text-gray-400 font-['Inter']">
@@ -397,7 +387,7 @@ export function Landing() {
                 <li><a href="#" className="hover:text-[#FFD369] transition-colors hover:underline">Mejores Prácticas</a></li>
               </ul>
             </div>
-            
+
             <div>
               <h4 className="font-bold mb-6 font-['Poppins'] text-lg">Soporte</h4>
               <ul className="space-y-3 text-gray-400 font-['Inter']">
@@ -409,12 +399,12 @@ export function Landing() {
               </ul>
             </div>
           </div>
-          
+
           <div className="border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center">
             <div className="text-gray-400 font-['Inter'] mb-4 md:mb-0">
               © 2025 Planifika por DrimSoft. Todos los derechos reservados.
             </div>
-            
+
             <div className="flex items-center p-4 bg-gradient-to-r from-[#3A6EA5]/10 to-[#FFD369]/10 rounded-2xl border border-[#3A6EA5]/20">
               <span className="text-sm text-gray-300 mr-3 font-['Inter']">Orgullosamente desarrollado por</span>
               <div className="flex items-center">

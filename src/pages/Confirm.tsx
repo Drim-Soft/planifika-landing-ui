@@ -1,17 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Logo } from '../components/ui/Logo';
+import { getSignupUrl } from '../config/env';
 
 export function Confirm() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { plan, metodo, datos } = location.state || {};
+  const { plan, method, data } = location.state || {};
 
-  if (!plan || !datos) {
-    navigate('/plans');
-    return null;
-  }
+  useEffect(() => {
+    if (!plan || !data) {
+      navigate('/plans');
+    }
+  }, [plan, data, navigate]);
+
+  if (!plan || !data) return null;
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#F7F7F7] via-white to-[#F7F7F7] p-6">
@@ -22,7 +26,7 @@ export function Confirm() {
           <Logo className="h-12 w-12" />
         </div>
 
-        {/* Título */}
+        {/* Title */}
         <h1 className="text-3xl font-bold text-[#222831] font-poppins mb-6">
           Pago confirmado ✅
         </h1>
@@ -38,24 +42,26 @@ export function Confirm() {
           </p>
         </div>
 
-        {/* Datos fijos del plan */}
+        {/* Plan data */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-[#3A6EA5] mb-2">{plan.nombre} Plan</h2>
+          <h2 className="text-2xl font-bold text-[#3A6EA5] mb-2">
+            {plan.name} Plan
+          </h2>
           <p className="text-gray-600 font-inter">
-            Método de pago: <strong>{metodo || 'No especificado'}</strong>
+            Método de pago: <strong>{method || 'No especificado'}</strong>
           </p>
-          <p className="text-lg font-semibold mt-2">Total: {plan.precio}</p>
+          <p className="text-lg font-semibold mt-2">Total: {plan.price}</p>
         </div>
 
         <Button
-          onClick={() => navigate('/')}
+          onClick={() => window.location.href = getSignupUrl(1)}
           className={`w-full py-4 text-lg font-poppins ${
-            plan.nombre === 'Premium'
+            plan.name === 'Premium'
               ? 'bg-[#FFD369] hover:bg-[#F5C94F] text-[#222831]'
               : 'bg-[#3A6EA5] hover:bg-[#2E5A8A] text-white'
           }`}
         >
-          Volver al inicio
+          Continuar al registro de administrador
         </Button>
       </div>
     </div>
