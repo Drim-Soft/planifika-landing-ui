@@ -4,7 +4,6 @@ import { Button } from '../components/ui/Button';
 import { Logo } from '../components/ui/Logo';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
-import emailjs from "@emailjs/browser";
 
 export function EnterpriseForm() {
   const location = useLocation();
@@ -20,25 +19,24 @@ export function EnterpriseForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const sendEmail = async (company: string, fullName: string, email: string, phone: string, accessCount: string) => {
-    emailjs
-      .send(
-        import.meta.env.VITE_EMAIL_SERVICE_ID,
-        import.meta.env.VITE_EMAIL_TEMPLATE_ID,
-        { company, fullName, email, phone, accessCount },
-        { publicKey: import.meta.env.VITE_EMAIL_PUBLIC_KEY }
-      )
-      .then(
-        (result) => {
-          setSubmitted(true);
-          setLoading(false);
-        }
-      ).catch(
-        (error) => {
-          console.error("Error ❌", error);
-          alert("Error al enviar el mensaje");
-        }
-      )
+  const sendEmail = async () => {
+    const payload = {
+      company,
+      fullName,
+      email,
+      phone,
+      accessCount: Number(accessCount),
+    };
+
+    const response = await fetch("http://localhost:8080/api/mail/send", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error("Error enviando correo");
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -47,7 +45,7 @@ export function EnterpriseForm() {
     setError('');
 
     try {
-      await sendEmail(company, fullName, email, phone, accessCount);
+      await sendEmail();
       setSubmitted(true);
       setTimeout(() => navigate('/'), 10000);
     } catch (err) {
@@ -60,6 +58,7 @@ export function EnterpriseForm() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#F7F7F7] via-white to-[#F7F7F7] p-6 flex flex-col">
+
       {/* Header */}
       <div className="max-w-5xl mx-auto bg-white rounded-3xl shadow-xl border border-gray-200 w-full">
         <div className="flex items-center justify-between p-8 border-b border-gray-200 bg-white">
@@ -83,15 +82,14 @@ export function EnterpriseForm() {
 
           {!submitted ? (
             <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-6 text-left">
+
               {/* Nombre empresa */}
               <div className="md:col-span-2">
                 <label className="block text-gray-700 font-semibold mb-2">Nombre de la empresa</label>
                 <input
                   type="text"
                   value={company}
-                  onChange={(e) =>
-                    setCompany(e.target.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúñÑ0-9 ]/g, ''))
-                  }
+                  onChange={(e) => setCompany(e.target.value)}
                   placeholder="Ej. Universidad de la Sabana"
                   required
                   className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#3A6EA5] outline-none"
@@ -104,16 +102,14 @@ export function EnterpriseForm() {
                 <input
                   type="text"
                   value={fullName}
-                  onChange={(e) =>
-                    setFullName(e.target.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúñÑ ]/g, ''))
-                  }
+                  onChange={(e) => setFullName(e.target.value)}
                   placeholder="Ej. Juan Pérez"
                   required
                   className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#3A6EA5] outline-none"
                 />
               </div>
 
-              {/* Correo empresarial */}
+              {/* Correo */}
               <div>
                 <label className="block text-gray-700 font-semibold mb-2">Correo empresarial</label>
                 <input
@@ -126,7 +122,7 @@ export function EnterpriseForm() {
                 />
               </div>
 
-              {/* Número de teléfono */}
+              {/* Teléfono */}
               <div className="md:col-span-2">
                 <label className="block text-gray-700 font-semibold mb-2">Teléfono de contacto</label>
                 <PhoneInput
@@ -135,16 +131,13 @@ export function EnterpriseForm() {
                   onChange={(value: string) => setPhone(value)}
                   enableSearch
                   disableSearchIcon
-                  preferredCountries={['co', 'mx', 'us', 'es', 'ar', 'br']}
-                  countryCodeEditable={false}
                   inputClass="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#3A6EA5] outline-none text-gray-800"
-                  buttonClass="border-gray-300 bg-white rounded-l-md"
                   dropdownClass="text-gray-700 bg-white shadow-lg border border-gray-300"
                   inputProps={{ name: 'phone', required: true }}
                 />
               </div>
 
-              {/* Total de accesos */}
+              {/* Accesos */}
               <div className="md:col-span-2">
                 <label className="block text-gray-700 font-semibold mb-2">
                   Total de accesos a comprar
@@ -152,15 +145,7 @@ export function EnterpriseForm() {
                 <input
                   type="number"
                   value={accessCount}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(/\D/g, '');
-                    setAccessCount(value);
-                  }}
-                  onBlur={() => {
-                    if (accessCount && parseInt(accessCount) < 501) {
-                      setAccessCount('501');
-                    }
-                  }}
+                  onChange={(e) => setAccessCount(e.target.value)}
                   placeholder="Ej. 1200"
                   min={501}
                   required
@@ -171,7 +156,6 @@ export function EnterpriseForm() {
                 </p>
               </div>
 
-              {/* Error message */}
               {error && (
                 <div className="md:col-span-2">
                   <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
