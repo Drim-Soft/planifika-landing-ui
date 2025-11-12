@@ -4,6 +4,7 @@ import { Logo } from '../components/ui/Logo';
 import { Button } from '../components/ui/Button';
 import { CheckCircle, ArrowRight } from 'lucide-react';
 import { getSignupUrl, ENV } from '../config/env';
+import emailjs from '@emailjs/browser';
 
 const SUBSCRIPTION_API_URL = ENV.SUBSCRIPTION_API_URL + '/invoices';
 const ORGANIZATION_API_URL = ENV.ORGANIZATION_API_URL + '/organizations';
@@ -68,6 +69,59 @@ export function Processing() {
     } catch (err: any) {
       console.error('Error creando organización:', err);
       throw err;
+    }
+  };
+
+  // Enviar correo con factura
+  const sendInvoiceEmail = async (
+    email: string,
+    institucion: string,
+    planNombre: string,
+    planPrecio: string,
+    total: number,
+    startDate: string,
+    endDate: string,
+    metodo: string
+  ) => {
+    try {
+      const paymentMethodName = metodo === 'tarjeta' ? 'Tarjeta de Crédito' : 'PayPal';
+      const formattedStartDate = new Date(startDate).toLocaleDateString('es-CO', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+      const formattedEndDate = new Date(endDate).toLocaleDateString('es-CO', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+      const formattedTotal = new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+      }).format(total);
+
+      // Cambiar "/ mes" por "/ año" en el precio del plan
+      const planPrecioAnual = planPrecio.replace(/\/ mes/g, '/ año');
+
+      await emailjs.send(
+        import.meta.env.VITE_EMAIL_SERVICE_ID,
+        import.meta.env.VITE_EMAIL_TEMPLATE2_ID,
+        {
+          to_email: email,
+          institucion: institucion,
+          planNombre: planNombre,
+          planPrecio: planPrecioAnual,
+          total: formattedTotal,
+          startDate: formattedStartDate,
+          endDate: formattedEndDate,
+          paymentMethod: paymentMethodName,
+          message: `Gracias por tu compra del plan ${planNombre}. Tu factura ha sido generada exitosamente.`,
+        },
+        { publicKey: import.meta.env.VITE_EMAIL_PUBLIC_KEY }
+      );
+    } catch (err) {
+      console.error('Error enviando correo de factura:', err);
+      // No lanzamos error para no interrumpir el flujo si falla el correo
     }
   };
 
@@ -176,9 +230,40 @@ export function Processing() {
         setOrganizationId(orgId);
 
         // 2. Crear factura
-        await createInvoice(orgId, state.plan, state.metodo, state.datos);
+        const invoiceResult = await createInvoice(orgId, state.plan, state.metodo, state.datos);
 
-        // 3. Mostrar pantalla de éxito
+        // 3. Enviar correo con factura
+        const total = extractPrice(state.plan.precio);
+        const today = new Date();
+        const endDate = new Date(today);
+        endDate.setFullYear(endDate.getFullYear() + 1);
+
+        const startDateUTC = new Date(Date.UTC(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate(),
+          0, 0, 0, 0
+        ));
+
+        const endDateUTC = new Date(Date.UTC(
+          endDate.getFullYear(),
+          endDate.getMonth(),
+          endDate.getDate(),
+          0, 0, 0, 0
+        ));
+
+        await sendInvoiceEmail(
+          state.datos.correo,
+          state.datos.institucion,
+          state.plan.nombre,
+          state.plan.precio,
+          total,
+          startDateUTC.toISOString(),
+          endDateUTC.toISOString(),
+          state.metodo
+        );
+
+        // 4. Mostrar pantalla de éxito
         setShowThankYou(true);
       } catch (err: any) {
         console.error('Error procesando pago:', err);
