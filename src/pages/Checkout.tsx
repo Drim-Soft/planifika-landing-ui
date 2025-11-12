@@ -23,6 +23,7 @@ export function Checkout() {
   const [correo, setCorreo] = useState<string>('');
   const [telefono, setTelefono] = useState<string>('');
   const [direccion, setDireccion] = useState<string>('');
+  const [dominio, setDominio] = useState<string>('');
   const [titular, setTitular] = useState<string>('');
 
   if (!plan) {
@@ -61,11 +62,10 @@ export function Checkout() {
           </div>
           <Button
             onClick={() => navigate('/plans')}
-            className={`font-poppins ${
-              isPremium
+            className={`font-poppins ${isPremium
                 ? 'bg-[#FFD369] hover:bg-[#F5C94F] text-[#222831]'
                 : 'bg-[#3A6EA5] hover:bg-[#2E5A8A]'
-            }`}
+              }`}
           >
             ← Cambiar plan
           </Button>
@@ -131,29 +131,29 @@ export function Checkout() {
 
             {/* Teléfono internacional */}
             <div>
-            <label className="block text-gray-700 font-semibold mb-2">Teléfono</label>
-            <div className="w-full">
+              <label className="block text-gray-700 font-semibold mb-2">Teléfono</label>
+              <div className="w-full">
                 <PhoneInput
-                country="co"                    // país por defecto (cambia si quieres)
-                value={telefono}                // guarda sin '+'
-                onChange={(phone: string) => {  // phone viene SIN el '+' al usar react-phone-input-2
+                  country="co"                    // país por defecto (cambia si quieres)
+                  value={telefono}                // guarda sin '+'
+                  onChange={(phone: string) => {  // phone viene SIN el '+' al usar react-phone-input-2
                     setTelefono(phone);           // ej: "573104567890" o "3104567890" (según configuracion)
-                }}
-                placeholder="Ingresa tu número de teléfono"
-                enableSearch
-                disableSearchIcon
-                preferredCountries={['co','mx','us','es','ar','br']}
-                countryCodeEditable={false}
-                // estilos: ajusta según tu tailwind setup, evita los '!' innecesarios
-                inputClass="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#3A6EA5] outline-none text-gray-800"
-                buttonClass="border-gray-300 bg-white rounded-l-md"
-                dropdownClass="text-gray-700 bg-white shadow-lg border border-gray-300"
-                inputProps={{
+                  }}
+                  placeholder="Ingresa tu número de teléfono"
+                  enableSearch
+                  disableSearchIcon
+                  preferredCountries={['co', 'mx', 'us', 'es', 'ar', 'br']}
+                  countryCodeEditable={false}
+                  // estilos: ajusta según tu tailwind setup, evita los '!' innecesarios
+                  inputClass="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#3A6EA5] outline-none text-gray-800"
+                  buttonClass="border-gray-300 bg-white rounded-l-md"
+                  dropdownClass="text-gray-700 bg-white shadow-lg border border-gray-300"
+                  inputProps={{
                     name: 'telefono',
                     required: true
-                }}
+                  }}
                 />
-            </div>
+              </div>
             </div>
             {/* Dirección */}
             <div className="md:col-span-2">
@@ -169,6 +169,25 @@ export function Checkout() {
                 className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#3A6EA5]"
               />
             </div>
+
+            {/* Dominio */}
+            <div className="md:col-span-2">
+              <label className="block text-gray-700 font-semibold mb-2">Dominio de la universidad</label>
+              <input
+                type="text"
+                value={dominio}
+                onChange={(e) => {
+                  const val = e.target.value.toLowerCase().replace(/[^a-z0-9.\-]/g, '');
+                  setDominio(val);
+                }}
+                placeholder="ejemplo.edu.co"
+                required
+                className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#3A6EA5]"
+              />
+              <p className="text-sm text-gray-500 mt-1">
+                Ingresa el dominio principal de tu institución (sin http:// o www)
+              </p>
+            </div>
           </form>
 
           {/* Método de pago */}
@@ -183,11 +202,10 @@ export function Checkout() {
                 <label
                   key={opcion.value}
                   onClick={() => setMetodo(opcion.value)}
-                  className={`flex-1 p-5 border rounded-xl cursor-pointer transition-all ${
-                    metodo === opcion.value
+                  className={`flex-1 p-5 border rounded-xl cursor-pointer transition-all ${metodo === opcion.value
                       ? 'border-[#3A6EA5] bg-[#3A6EA5]/10'
                       : 'border-gray-300 hover:border-[#3A6EA5]'
-                  }`}
+                    }`}
                 >
                   <input
                     type="radio"
@@ -307,24 +325,23 @@ export function Checkout() {
           {/* Total */}
           <div className="mt-12 text-center">
             <h3 className="text-3xl font-bold text-[#222831] mb-3">Total: {plan.precio}</h3>
-          <Button
-            onClick={() =>
-              navigate('/processing', {
-                state: {
-                  plan,
-                  metodo,
-                  datos: { institucion, nit, correo, telefono, direccion },
-                },
-              })
-            }
-            className={`px-12 py-4 text-lg font-poppins ${
-              isPremium
-                ? 'bg-[#FFD369] hover:bg-[#F5C94F] text-[#222831]'
-                : 'bg-[#3A6EA5] hover:bg-[#2E5A8A] text-white'
-            }`}
-          >
-            Confirmar suscripción
-          </Button>
+            <Button
+              onClick={() =>
+                navigate('/processing', {
+                  state: {
+                    plan,
+                    metodo,
+                    datos: { institucion, nit, correo, telefono, direccion, dominio },
+                  },
+                })
+              }
+              className={`px-12 py-4 text-lg font-poppins ${isPremium
+                  ? 'bg-[#FFD369] hover:bg-[#F5C94F] text-[#222831]'
+                  : 'bg-[#3A6EA5] hover:bg-[#2E5A8A] text-white'
+                }`}
+            >
+              Confirmar suscripción
+            </Button>
           </div>
         </div>
       </div>

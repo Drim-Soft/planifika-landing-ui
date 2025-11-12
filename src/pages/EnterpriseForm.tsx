@@ -16,16 +16,17 @@ export function EnterpriseForm() {
   const [email, setEmail] = useState('');
   const [accessCount, setAccessCount] = useState('');
   const [phone, setPhone] = useState('');
+  const [dominio, setDominio] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const sendEmail = async (company: string, fullName: string, email: string, phone: string, accessCount: string) => {
+  const sendEmail = async (company: string, fullName: string, email: string, phone: string, accessCount: string, dominio: string) => {
     emailjs
       .send(
         import.meta.env.VITE_EMAIL_SERVICE_ID,
         import.meta.env.VITE_EMAIL_TEMPLATE_ID,
-        { company, fullName, email, phone, accessCount },
+        { company, fullName, email, phone, accessCount, dominio },
         { publicKey: import.meta.env.VITE_EMAIL_PUBLIC_KEY }
       )
       .then(
@@ -47,7 +48,7 @@ export function EnterpriseForm() {
     setError('');
 
     try {
-      await sendEmail(company, fullName, email, phone, accessCount);
+      await sendEmail(company, fullName, email, phone, accessCount, dominio);
       setSubmitted(true);
       setTimeout(() => navigate('/'), 10000);
     } catch (err) {
@@ -142,6 +143,25 @@ export function EnterpriseForm() {
                   dropdownClass="text-gray-700 bg-white shadow-lg border border-gray-300"
                   inputProps={{ name: 'phone', required: true }}
                 />
+              </div>
+
+              {/* Dominio */}
+              <div className="md:col-span-2">
+                <label className="block text-gray-700 font-semibold mb-2">Dominio de la universidad</label>
+                <input
+                  type="text"
+                  value={dominio}
+                  onChange={(e) => {
+                    const val = e.target.value.toLowerCase().replace(/[^a-z0-9.\-]/g, '');
+                    setDominio(val);
+                  }}
+                  placeholder="ejemplo.edu.co"
+                  required
+                  className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#3A6EA5] outline-none"
+                />
+                <p className="text-sm text-gray-500 mt-1">
+                  Ingresa el dominio principal de tu institución (sin http:// o www)
+                </p>
               </div>
 
               {/* Total de accesos */}
